@@ -9,6 +9,8 @@
 <body>
     <form id="form1" runat="server">
     <div>
+        Logged out. <br/>
+        <a href="~/Auth.aspx">Attempt Login</a>
         <!-- 
             Page is purely for convenience during testing. 
             The preferrable method of logging out is a DELETE to the auth controller. 

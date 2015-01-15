@@ -3,6 +3,11 @@
 <asp:Content ContentPlaceHolderID="HeadContent" runat="server" >
 </asp:Content>
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
+    <div>
+        Auth Success. <br/>
+        <a href="~/Logout.aspx">Logout</a>
+    </div>
+    
     <script type="text/javascript">
         //For prevention of XSS, add the domain. Leave as-is for demo purposes.
         var originRestriction = {

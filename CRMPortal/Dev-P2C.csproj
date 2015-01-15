@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Auth.aspx" />
+    <Content Include="AuthFail.aspx" />
     <Content Include="Global.asax" />
     <Content Include="lib\AntiXSSLibrary.dll" />
     <Content Include="lib\Common.Logging.dll" />
@@ -218,6 +219,13 @@
     </Compile>
     <Compile Include="Auth.aspx.designer.cs">
       <DependentUpon>Auth.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AuthFail.aspx.cs">
+      <DependentUpon>AuthFail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AuthFail.aspx.designer.cs">
+      <DependentUpon>AuthFail.aspx</DependentUpon>
     </Compile>
     <Compile Include="classes\ActorPool.cs" />
     <Compile Include="classes\ForbiddenAccessException.cs" />

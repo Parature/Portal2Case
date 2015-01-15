@@ -25,22 +25,6 @@ namespace Portal2Case
             //They'll run every CacheRenewalInterval
             SessionManagement.RetrieveContactList
         };
-        //Direct copy from agent-config.txt
-        //Do NOT tab! Very sensitive to pasted format
-        //Copied since I was having issues with file path definition.
-        //BIG NOTE: This will totally screw up if you change the line return. VS will prompt to equalize CRs, and this will BREAK SSO!
-        //If that happens, copy and paste from the agent file in source control again.
-        private const string agentcfg = @"cookie-path=/
-cipher-suite=2
-obfuscate-password=true
-token-notbefore-tolerance=0
-token-renewuntil=43200
-use-sunjce=false
-password=bCye9cOxXQlaXNijWV6KiA==
-token-name=opentoken
-token-lifetime=300
-use-cookie=false";
-        private const string SsoAttrDataKey = "__DATA__";
 
         /// <summary>
         /// Configures application-level configs:
@@ -93,25 +77,6 @@ use-cookie=false";
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
-            //Set's the user session if there is a matching contact in CRM
-            var opentoken = OpenTokenSso.DecodeOpenToken(Request, agentcfg);
-            if (opentoken != null)
-            {
-                var paraLookupAttribute = ConfigurationManager.AppSettings["SSOattribute"];
-                var attributes = OpenTokenSso.ParseDataAttributes(opentoken, SsoAttrDataKey);
-                var uid = OpenTokenSso.GetSsoAttribute(attributes, paraLookupAttribute);
-
-                if (String.IsNullOrWhiteSpace(uid) == false)
-                {
-                    var contact = SessionManagement.RetrieveContact(uid);
-                    if (contact != null)
-                    {
-                        SessionManagement.SessionContact = contact;
-                        SessionManagement.SetUserPermissions();
-                    }
-                }
-            }
-
             //Redirect to SSO link if enabled in settings
             bool ssoEnabled;
             Boolean.TryParse(ConfigurationManager.AppSettings["SSOenabled"], out ssoEnabled);
@@ -123,10 +88,7 @@ use-cookie=false";
             if (SessionManagement.NotAuthorized()
                 && Request.Url.LocalPath.IndexOf("/Auth.aspx", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                var redirLoc = new Uri(ConfigurationManager.AppSettings["SSOstartLink"]);
-                redirLoc = new Uri(redirLoc, string.Format("?PartnerIdpId={0}&TARGET={1}", 
-                    ConfigurationManager.AppSettings["SSOIdPLink"], Request.Url.OriginalString));
-                Response.Redirect(redirLoc.AbsoluteUri);
+                Response.Redirect("");
             }
         }
 
