@@ -15,21 +15,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializationTesting", "SerializationTesting\SerializationTesting.csproj", "{B6DA3E07-9F5D-47A7-9ABD-88641DB67A14}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://paraturets.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = CRMQueryProfiling\\CRMQueryProfiling.csproj
-		SccProjectName1 = CRMQueryProfiling
-		SccLocalPath1 = CRMQueryProfiling
-		SccProjectUniqueName2 = SerializationTesting\\SerializationTesting.csproj
-		SccProjectName2 = SerializationTesting
-		SccLocalPath2 = SerializationTesting
-		SccProjectUniqueName3 = CRMPortal\\Dev-P2C.csproj
-		SccProjectName3 = CRMPortal
-		SccLocalPath3 = CRMPortal
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
