@@ -1,0 +1,226 @@
+﻿/* 
+ * Customization PURELY for iframing a CRM portal
+ * TODO: add resets, inherit from colors in other templates
+ */
+
+/* myhistory.asp, mytickets.asp */
+form#myTicketSearchForm,
+div#myTicketHistory,
+ol.myrecentrequests {
+	display: none !important;
+}
+
+/* ticketwizard.asp */
+body.ticketnewwizard_asp form#configFields {
+	display: none;
+}
+
+/*** Inside the iFrame, set styles here */
+body.CRMPortal div.createSuccess {
+    padding: 1em 0;
+}
+
+body.CRMPortal span.ticketNumber {
+    cursor: pointer;
+    font-weight: bold;
+}
+/*** End inside iFrame styles */
+
+/* iframe Styling */
+iframe#crmPortalFrame {
+	width: 100%;
+	overflow: hidden;
+    position: relative;
+}
+
+div#caseDetails {
+    position: fixed;
+    z-index: 1000;
+    top: 100px;
+    left: 100px;
+    right: 100px;
+    min-height: 70%;
+    border: grey solid 2px;
+    border-style: outset;
+}
+
+div#caseDetails.hidden,
+div#caseDetails *.hidden,
+div#frameWrap.hidden,
+div#frameWrap *.hidden {
+    display: none;
+}
+
+div#frameContents {
+    padding: 1em;
+	box-sizing: border-box;
+    overflow: auto;
+}
+
+iframe#crmDetailsFrame {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+span#detailsClose {
+    cursor: pointer;
+    color: #fff;
+    padding-top: .5em;
+    border-radius: 15px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    width: 33px;
+    margin-left: 40%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -15px;
+    margin-top: -15px;
+    border: none;
+    box-shadow: 2px 2px 2px #555;
+    background-color: #0066FF;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0066FF), to(#002050));
+    background-image: -webkit-linear-gradient(top, #0066FF, #002050);
+    background-image: -moz-linear-gradient(top, #0066FF, #002050);
+    background-image: -ms-linear-gradient(top, #0066FF, #002050);
+    background-image: -o-linear-gradient(top, #0066FF, #002050);
+}
+
+/* Loader gif for iframes */
+div#frameWrap {
+    position: relative;
+}
+
+button.crmSubmit {
+    margin-top: 1em;
+}
+
+div#frameWrap img.loader,
+div#caseDetails img.loader {
+    border-radius: 20px;
+    padding: 25px;
+    background: #ffffff;
+    box-shadow: 0px 0px 10px #777777;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+body.CRMPortal fieldset input {
+    display: block;
+}
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+body.CRMPortal fieldset {
+    margin: 0;
+}
+
+span.ticketNumber {
+    cursor: pointer;
+}
+
+/* Fix for iframe z-index */
+div#main-header {
+    z-index: 1;
+}
+
+/* Easy Answer */
+div#EasyAnswerContainer ol.searchResults {
+    width: 100%;
+}
+
+div#EasyAnswerContainer a.articleLink {
+    display: block;
+    font-weight: bold;
+}
+
+div#EasyAnswerContainer span.articleText {
+    display: block;
+    margin: .5em;
+}
+
+div#EasyAnswerContainer span.articleLocation {
+    font-style: italic;
+}
+
+form#caseDetails {
+    margin-bottom: 1em;
+}
+
+/* Tabs for Comments */
+.tabsMenu {
+    height: 30px;
+    float: left;
+    clear: both;
+    width: 100%;
+}
+
+.tabsMenu li {
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    margin-right: 10px;
+    background-color: #ccc;
+    border-top: 1px solid #d4d4d1;
+    border-right: 1px solid #d4d4d1;
+    border-left: 1px solid #d4d4d1;
+    list-style: none;
+}
+
+.tabsMenu li.current {
+    position: relative;
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.tabsMenu li a {
+    padding: 10px;
+    color: #fff;
+    text-decoration: none; 
+}
+
+.tabsMenu .current a {
+    color: #2e7da3;
+}
+
+.tabs {
+    border: 1px solid #d4d4d1;
+    background-color: #fff;
+    float: left;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.tabContent {
+    padding: 20px;
+    display: none;
+}
+
+.p2c-loading {
+    height: 30px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("/portal/pics/loading.GIF");
+}
+
+div#caseDetails.p2c-loading {
+    background-size: auto;
+}
+
+div#EasyAnswerContainer.p2c-loading {
+    margin-top: 1em;
+}

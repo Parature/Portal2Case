@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    
+    <!-- Dependencies for the Entity Classes -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
+    <script src='//cdn.ractivejs.org/latest/ractive-legacy.js'></script>
+    <script type="text/javascript" src="../PortalExample/js/classes.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+</head>
+<body>
+    <div id='container'></div>
+
+    <div id="helloContainer"></div>
+
+    <!-- Template for listing -->
+    <script id='template' type='text/ractive'>
+        <table class='superheroes'>
+            <tr>
+                {{#each header}}
+                <th data-logicalname="{{logicalName}}" class='sortable'>{{display}}</th>
+                {{/each}}
+            </tr>
+
+            {{#each entities:index}}
+            <tr>
+                {{!-- Iterate through the view list and display the attributes --}}
+                {{#each header}}
+                <td>
+                    {{!-- Using the crm attribute component, passing in data context --}}
+                    <entityAttribute attribute="{{entities[index].getAttribute(this.logicalName)}}">
+                    </entityAttribute>
+                </td>
+                {{/each}}
+            </tr>
+            {{/each}}
+        </table>
+    </script>
+
+
+
+
+    <!-- Attribute Templates -->
+    <div id="attributeContainer"></div>
+
+    <script id='crmAttribute' type='text/ractive'>
+        {{#if (editing == false)}}
+            {{!-- Use the class' built-in display functionality --}}
+            <span on-click="setEdit:true">{{attribute.getDisplay()}}</span>
+        {{else}}
+            {{!-- Split out to partials for editing. Based off of type attribute --}}
+            {{>getPartial(attribute.type)}}
+        {{/if}}
+        
+        {{!-- Partials section. Editors for each type. --}}
+        <!-- {{>dropdown}} -->
+        <select on-blur="setEdit:false" value="{{attribute.val}}">
+            {{#each attribute.options.opts}}
+            <option value="{{val}}">{{label}}</option>
+            {{/each}}
+        </select>
+        <!-- {{/dropdown}} -->
+        
+        <!-- {{>int}} -->
+        <input value="{{attribute.val}}"
+               type="number"
+               step="1"
+               on-blur="setEdit:false">
+        <!-- {{/int}} -->
+        
+        <!-- {{>float}} -->
+        <input value="{{attribute.val}}"
+               type="number"
+               step="0.01"
+               on-blur="setEdit:false">
+        <!-- {{/float}} -->
+        
+        <!-- {{>direct}} -->
+        <input value="{{attribute.val}}" 
+               on-blur="setEdit:false">
+        <!-- {{/direct}} -->
+        
+        <!-- {{>datetime}} -->
+        {{!-- Super duper not supported --}}
+        <input value="{{attribute.val}}" 
+               type="datetime-local"
+               on-blur="setEdit:false">
+        <!-- {{/datetime}} -->
+    </script>
+
+    <script type="text/javascript" src="control.js"></script>
+
+
+
+    <!-- Hello world. For debugging if things totally die -->
+    <script id='hello' type='text/ractive'>
+        <p>Hello, {{name}}! ractive is working</p>
+    </script>
+
+    <script>
+        var ractive = new Ractive({
+            // The `el` option can be a node, an ID, or a CSS selector.
+            el: 'helloContainer',
+
+            // We could pass in a string, but for the sake of convenience
+            // we're passing the ID of the <script> tag above.
+            template: '#hello',
+
+            // Here, we're passing in some initial data
+            data: { name: 'world' }
+        });
+    </script>
+
+</body>
+</html>
