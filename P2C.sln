@@ -1,18 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev-P2C", "CRMPortal\Dev-P2C.csproj", "{650E8CEB-D904-4C37-BBE3-1A6BA6516786}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRMQueryProfiling", "CRMQueryProfiling\CRMQueryProfiling.csproj", "{7F1427F7-E150-4EE2-83B8-D1C98D6FF589}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16E252E8-C236-446C-8F98-C90E95BF4D50}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{23DB1F9C-34B4-43EE-9C86-C6AB19CFFBC9}"
 	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializationTesting", "SerializationTesting\SerializationTesting.csproj", "{B6DA3E07-9F5D-47A7-9ABD-88641DB67A14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,14 +22,6 @@ Global
 		{650E8CEB-D904-4C37-BBE3-1A6BA6516786}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650E8CEB-D904-4C37-BBE3-1A6BA6516786}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{650E8CEB-D904-4C37-BBE3-1A6BA6516786}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F1427F7-E150-4EE2-83B8-D1C98D6FF589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F1427F7-E150-4EE2-83B8-D1C98D6FF589}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F1427F7-E150-4EE2-83B8-D1C98D6FF589}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F1427F7-E150-4EE2-83B8-D1C98D6FF589}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6DA3E07-9F5D-47A7-9ABD-88641DB67A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6DA3E07-9F5D-47A7-9ABD-88641DB67A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6DA3E07-9F5D-47A7-9ABD-88641DB67A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6DA3E07-9F5D-47A7-9ABD-88641DB67A14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
