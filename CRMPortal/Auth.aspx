@@ -10,7 +10,7 @@
             from: "*"
         }
 
-        /* AJAX proxy
+        /* AJAX proxy - for IE8/9
          // check action
          // respond with id and status
 
@@ -76,7 +76,7 @@
     </script>
 
     <script type="text/javascript">
-        //stringified messages for IE
+        //Alert the parent window that the page has loaded, we are authenticated, and ready to mirror AJAX requests if necessary
         parent.postMessage("ready", originRestriction.to);
     </script>
 </asp:Content>

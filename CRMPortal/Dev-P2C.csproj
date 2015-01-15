@@ -193,7 +193,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="agent-config.txt" />
     <Content Include="Auth.aspx" />
     <Content Include="Global.asax" />
     <Content Include="lib\AntiXSSLibrary.dll" />
@@ -219,19 +218,12 @@
     <Content Include="lib\opentoken-agent.dll" />
     <Content Include="CrmData.svc" />
     <Content Include="Logout.aspx" />
-    <Content Include="ractive\control.js" />
-    <Content Include="ractive\data.js" />
     <Content Include="portal\js\ui.js" />
-    <Content Include="portal\style.css" />
-    <Content Include="portal\top.htm" />
     <Content Include="portal\js\classes.js" />
     <Content Include="portal\js\dist\p2c.min.js" />
     <Content Include="portal\js\initScript.js" />
     <Content Include="portal\js\jquery.p2c.js" />
-    <Content Include="portal\bottom.htm" />
-    <Content Include="portal\head.htm" />
     <Content Include="portal\css\p2c_styling.css" />
-    <Content Include="ractive\index.htm" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

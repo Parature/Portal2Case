@@ -11,7 +11,7 @@ using Xrm;
 
 namespace Portal2Case.classes
 {
-    public class SessionManagement
+    public static class SessionManagement
     {
         public static ActorPool<XrmServiceContext> Pool;
         /*

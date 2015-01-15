@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Http.Cors;
 using System.Web.SessionState;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client;
-using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
-using opentoken;
 using Portal2Case.classes;
 using Portal2Case.services.filters;
 using Xrm;
@@ -60,8 +53,11 @@ use-cookie=false";
         protected void Application_Start(object sender, EventArgs e)
         {
             var config = GlobalConfiguration.Configuration;
-            var corsConfig = new EnableCorsAttribute("http://demo.parature.com", "*", "*")
+            var corsDomain = ConfigurationManager.AppSettings["CorsDomainAllowed"];
+            var corsConfig = new EnableCorsAttribute(corsDomain, "*", "*")
             {
+                //This will allow Cookies in all modern browsers.
+                //IE8/9 will use a postMessage proxy - they don't support CORS well
                 SupportsCredentials = true
             };
             config.EnableCors(corsConfig);

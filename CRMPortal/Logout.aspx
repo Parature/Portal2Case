@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
     <div>
         <!-- 
-            Form is purely for convenience during testing. 
+            Page is purely for convenience during testing. 
             The preferrable method of logging out is a DELETE to the auth controller. 
         -->
     </div>
