@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Http;
 using System.Xml.Linq;
 using Portal2Case.classes;
-using Xrm;
 
 namespace Portal2Case.services
 {

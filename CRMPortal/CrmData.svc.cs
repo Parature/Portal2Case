@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Services;
+﻿using System.Data.Services;
 using System.Data.Services.Common;
-using System.Linq;
-using System.Web;
+using Microsoft.Xrm.Client;
 
 namespace Portal2Case
 {
-    public class CrmData : DataService<Xrm.XrmServiceContext>
+    public class CrmData : DataService<CrmOrganizationServiceContext>
     {
         // This method is called only once to initialize service-wide policies.
         public static void InitializeService(DataServiceConfiguration config)

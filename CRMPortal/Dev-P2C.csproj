@@ -54,39 +54,46 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AntiXSSLibrary">
-      <HintPath>..\..\..\..\crmSDK\Bin\AntiXSSLibrary.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4.1\lib\net40\AntiXSSLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.6.1.1\lib\net45\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Microsoft.IdentityModel.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d656d2ff32def8c3, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.ServiceBus, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ProductizedCRMSync\lib\Microsoft.Xrm.Client.dll</HintPath>
+      <HintPath>..\packages\WindowsAzure.ServiceBus.2.1.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Portal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c206a51d664bf36b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ProductizedCRMSync\lib\Microsoft.Xrm.Portal.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.0.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ProductizedCRMSync\lib\Microsoft.Xrm.Sdk.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4.1\lib\net40\Microsoft.Xrm.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Client.CodeGeneration">
+      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4.1\lib\net40\Microsoft.Xrm.Client.CodeGeneration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Portal">
+      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4.1\lib\net40\Microsoft.Xrm.Portal.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Portal.Files">
+      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4.1\lib\net40\Microsoft.Xrm.Portal.Files.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.6.1.1\lib\net45\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
+      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.6.0.4\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="opentoken-agent, Version=2.5.0.0, Culture=neutral, PublicKeyToken=51e867d115bd07ce, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\opentoken-agent.dll</HintPath>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\PresentationFramework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -103,9 +110,13 @@
     <Reference Include="System.Data.Services.Client">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http">
       <Private>True</Private>
     </Reference>
@@ -113,12 +124,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web">
       <Private>True</Private>
     </Reference>
@@ -163,32 +177,12 @@
     <Reference Include="System.Xml.Linq">
       <Private>True</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Auth.aspx" />
     <Content Include="AuthFail.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="lib\AntiXSSLibrary.dll" />
-    <Content Include="lib\Common.Logging.dll" />
-    <Content Include="lib\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="lib\Microsoft.IdentityModel.dll" />
-    <Content Include="lib\Microsoft.Xrm.Client.dll" />
-    <Content Include="lib\Microsoft.Xrm.Client.xml" />
-    <Content Include="lib\Microsoft.Xrm.Portal.dll" />
-    <Content Include="lib\Microsoft.Xrm.Portal.Files.dll" />
-    <Content Include="lib\Microsoft.Xrm.Portal.xml" />
-    <Content Include="lib\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="lib\Microsoft.Xrm.Sdk.Deployment.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="lib\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="lib\Microsoft.Xrm.Sdk.Workflow.dll" />
-    <Content Include="lib\Microsoft.Xrm.Sdk.Workflow.xml" />
-    <Content Include="lib\Microsoft.Xrm.Sdk.xml" />
-    <Content Include="lib\Newtonsoft.Json.dll" />
-    <Content Include="lib\Newtonsoft.Json.pdb" />
-    <Content Include="lib\Newtonsoft.Json.xml" />
-    <Content Include="lib\opentoken-agent.dll" />
     <Content Include="CrmData.svc" />
     <Content Include="Logout.aspx" />
     <Content Include="portal\js\ui.js" />
@@ -229,7 +223,6 @@
     </Compile>
     <Compile Include="classes\ActorPool.cs" />
     <Compile Include="classes\ForbiddenAccessException.cs" />
-    <Compile Include="classes\OpenTokenSso.cs" />
     <Compile Include="classes\ParatureException.cs" />
     <Compile Include="classes\CustomJsonConverters.cs" />
     <Compile Include="classes\SecurityContext.cs" />
@@ -262,7 +255,6 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="classes\Xrm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Site.Master" />

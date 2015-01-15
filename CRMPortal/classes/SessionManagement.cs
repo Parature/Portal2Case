@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using Xrm;
 
 namespace Portal2Case.classes
 {
     public static class SessionManagement
     {
-        public static ActorPool<XrmServiceContext> Pool;
+        public static ActorPool<CrmOrganizationServiceContext> Pool;
         /*
          * Contains the list of ALL CRM contacts. These are cached to limit the delay of lookups during SSO.
          * Further, allows much more complicated lookup queries (case-insensitive, or regexes) than a QueryExpression can handle
@@ -21,14 +19,14 @@ namespace Portal2Case.classes
          */
         private static List<Entity> _cachedContacts = new List<Entity>(); 
 
-        public static Contact SessionContact
+        public static Entity SessionContact
         {
             get
             {
-                Contact user = null;
+                Entity user = null;
                 try
                 {
-                    user = (Contact) HttpContext.Current.Session["CRMuser"];
+                    user = (Entity) HttpContext.Current.Session["CRMuser"];
                 }
                 catch (NullReferenceException e)
                 { /* Session not initialized */ }
@@ -69,7 +67,7 @@ namespace Portal2Case.classes
             }
         }
 
-        public static Contact RetrieveContact(string uid)
+        public static Entity RetrieveContact(string uid)
         {
             var crmContactFieldLookup = ConfigurationManager.AppSettings["CRMContactFieldLookup"];
 
@@ -78,7 +76,7 @@ namespace Portal2Case.classes
 
             if (resultEntity != null)
             {
-                return (Contact)resultEntity;
+                return resultEntity;
             }
 
             //unable to log in the user. They don't exist in this parature instance.
@@ -98,7 +96,7 @@ namespace Portal2Case.classes
             while (moreRecords)
             {
                 //query expression
-                var qe = new QueryExpression(Contact.EntityLogicalName)
+                var qe = new QueryExpression("contact")
                 {
                     ColumnSet = new ColumnSet(crmContactFieldLookup),
                     PageInfo = new PagingInfo
@@ -162,7 +160,8 @@ namespace Portal2Case.classes
             var entPermissions = new EntityPermissionsContext(entReadList, entCreateList, entUpdateList);
             var relatedPermissions = new EntityPermissionsContext(relatedReadList, relatedCreateList, relatedUpdateList);
             var permContext = new SecurityContext(entPermissions, relatedPermissions);
-            SessionManagement.UserPermissions = permContext;
+            
+            UserPermissions = permContext;
         }
     }
 }

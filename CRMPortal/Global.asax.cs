@@ -6,10 +6,10 @@ using System.Web.Caching;
 using System.Web.Http.Cors;
 using System.Web.SessionState;
 using Microsoft.Xrm.Client;
+using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
 using Portal2Case.classes;
 using Portal2Case.services.filters;
-using Xrm;
 using System.Web.Http;
 
 namespace Portal2Case
@@ -53,10 +53,10 @@ namespace Portal2Case
              * Initialize the connection 'pool'. 
              * It's really a bunch resources which act on delegates
              */
-            SessionManagement.Pool = new ActorPool<XrmServiceContext>(30, () =>
+            SessionManagement.Pool = new ActorPool<CrmOrganizationServiceContext>(30, () =>
             {
                 var connection = new CrmConnection("Xrm");
-                return new XrmServiceContext(connection);
+                return new CrmOrganizationServiceContext(connection);
             });
 
             //Scheduled tasks based off of cache expiration
