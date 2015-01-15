@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Mvc;
-using System.Web.SessionState;
 using System.Xml.Linq;
 using Portal2Case.classes;
 using Xrm;
@@ -12,8 +9,6 @@ using Xrm;
 namespace Portal2Case.services
 {
     //[AuthFilter]  // uncomment if you don't want ANYONE to be able to access saved queries without being logged in.
-    [SessionState(SessionStateBehavior.ReadOnly)]
-    [EnableCors(origins: "http://demo.parature.com", headers: "*", methods: "*", SupportsCredentials = true)]
     public class SavedQueryController : ApiController
     {
         /// <summary>

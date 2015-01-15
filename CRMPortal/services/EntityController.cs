@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Mvc;
-using System.Web.SessionState;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -16,8 +13,6 @@ using Portal2Case.services.filters;
 namespace Portal2Case.services
 {
     [AuthFilter]
-    [SessionState(SessionStateBehavior.ReadOnly)]
-    [EnableCors(origins: "http://demo.parature.com", headers: "*", methods: "*", SupportsCredentials = true)]
     public class EntityController : ApiController
     {
         public EntityCollection GetEntityCollection(string entityLogicalName)

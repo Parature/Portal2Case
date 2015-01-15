@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Mvc;
-using System.Web.SessionState;
+﻿using System.Web.Http;
 using Portal2Case.classes;
 using Portal2Case.services.filters;
 
 namespace Portal2Case.services
 {
     [AuthFilter]
-    [SessionState(SessionStateBehavior.ReadOnly)]
-    [EnableCors(origins: "http://demo.parature.com", headers: "*", methods: "*", SupportsCredentials = true)]
     public class AuthController : ApiController
     {
         public bool Get()
