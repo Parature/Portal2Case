@@ -388,7 +388,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
     var commentCreateView;
 
     //Wait for all AJAX to complete. Need to retrieve a bunch of 
-    $.when(p2cUtil.getRelatedEntities('incident', id, 'new_casecomments'),
+    $.when(p2cUtil.getRelatedEntities('incident', id, 'new_casecomment'),
             p2cUtil.getSavedView(commentsTableCrmView),
             p2cUtil.getCommentsMetadata(),
             p2cUtil.getSavedView(commentCreateCrmView))
@@ -657,12 +657,12 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         //adding a really basic caching layer using sessionStorage API
         //resets after closing of browser
         var def = $.Deferred(); 
-        var key = 'metadata/new_casecomments'; //saved using this key
+        var key = 'metadata/new_casecomment'; //saved using this key
 
         var cachedData = p2cSessStoreGet(key);
         if (cachedData == undefined) {
             $.p2c({
-                url: "metadata/new_casecomments",
+                url: "metadata/new_casecomment",
                 type: "get",
             }).done(function(data) {
                 p2cSessStorePut(key, data); //cache
