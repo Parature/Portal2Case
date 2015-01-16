@@ -217,7 +217,7 @@
 
     /* Simple browser parser (anchor tag) returned
         url.protocol; // => "http:"
-        url.hostname; // => "example.com"
+        url.hostname; // => "http://example.com"
         url.port;     // => "3000"
         url.pathname; // => "/pathname/"
         url.search;   // => "?search=test"
@@ -297,7 +297,7 @@
             //create the iframe and bootstrap it
             var iframe = $('<iframe />');
             iframe.attr({
-                'src': _config.url + "Auth.aspx",
+                'src': _parseUrl(_config.url).origin + "/Auth.aspx",
                 'id': 'authP2C'
             });
             iframe.attr('style', 'display:none !important'); //don't use $.css. Bad in IE
