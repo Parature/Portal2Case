@@ -184,6 +184,7 @@
     <Content Include="AuthFail.aspx" />
     <Content Include="Global.asax" />
     <Content Include="CrmData.svc" />
+    <Content Include="License.txt" />
     <Content Include="Logout.aspx" />
     <Content Include="portal\js\ui.js" />
     <Content Include="portal\js\classes.js" />
@@ -261,7 +262,14 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Microsoft-Contribution-License-Agreement.docx" />
+    <Content Include="Microsoft-Contribution-License-Agreement.pdf" />
+    <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CONTRIBUTING.md" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
