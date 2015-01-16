@@ -56,8 +56,8 @@ $.p2c.ready(function() {
 
         //Push the raw data back to the above variables so we don't have to pass them around
         incidentMetadata = meta[0];
-        listView = getViewArr(view[0]);
-        listViewSort = getViewOrder(view[0]); // Data
+        listView = p2cUtil.getViewArr(view[0]);
+        listViewSort = p2cUtil.getViewOrder(view[0]); // Data
 
         //Convert the raw JSON to classes.
         var rawList = inc[0]['Entities']['$values'] || [];
