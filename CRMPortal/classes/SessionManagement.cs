@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Windows.Documents;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -11,22 +12,29 @@ namespace Portal2Case.classes
 {
     public static class SessionManagement
     {
+        private const string ContactLogicalName = "contact";
+        //Globally available "threadpool" of crm services.
         public static ActorPool<CrmOrganizationServiceContext> Pool;
+        public static List<string> CrmContactLookupFields = new List<string>();
+
         /*
          * Contains the list of ALL CRM contacts. These are cached to limit the delay of lookups during SSO.
          * Further, allows much more complicated lookup queries (case-insensitive, or regexes) than a QueryExpression can handle
-         * It is replaced periodically in a very large re-retrieval.
+         * It is replaced periodically in a very large re-retrieval. 
          */
         private static List<Entity> _cachedContacts = new List<Entity>(); 
 
-        public static Entity SessionContact
+        /// <summary>
+        /// Wrapper around the Session contact
+        /// </summary>
+        public static EntityReference SessionContact
         {
             get
             {
-                Entity user = null;
+                EntityReference user = null;
                 try
                 {
-                    user = (Entity) HttpContext.Current.Session["CRMuser"];
+                    user = (EntityReference) HttpContext.Current.Session["CRMuser"];
                 }
                 catch (NullReferenceException e)
                 { /* Session not initialized */ }
@@ -43,6 +51,9 @@ namespace Portal2Case.classes
             }
         }
 
+        /// <summary>
+        /// Wrapper around the Session contact's entity-level permissions
+        /// </summary>
         public static SecurityContext UserPermissions
         {
             get
@@ -67,28 +78,42 @@ namespace Portal2Case.classes
             }
         }
 
-        public static Entity RetrieveContact(string uid)
+        /// <summary>
+        /// Retrieve the Contact based off of a lookup field (must be a string)
+        /// </summary>
+        /// <param name="paratureUidField"></param>
+        /// <returns>Entity if found, otherwise null</returns>
+        public static EntityReference RetrieveContact(string crmUidField, string paratureUidField)
         {
-            var crmContactFieldLookup = ConfigurationManager.AppSettings["CRMContactFieldLookup"];
-
             var resultEntity =
-                _cachedContacts.FirstOrDefault(ent => ent.GetAttributeValue<string>(crmContactFieldLookup) == uid);
-
-            if (resultEntity != null)
-            {
-                return resultEntity;
-            }
-
-            //unable to log in the user. They don't exist in this parature instance.
-            throw new ParatureException("Unable to find your account record. ");
+                _cachedContacts.FirstOrDefault(ent => ent.GetAttributeValue<string>(crmUidField) == paratureUidField);
+            return (resultEntity != null)
+                ? resultEntity.ToEntityReference()
+                : null;
         }
 
-        //Warning: This is likely causing gen2 garbage collection, which will result in global halt during GC
-        //Really needs to be updated to be more efficient, but there aren't any ways to retrieve customers who are deleted from CRM (so we can remove internally)
-        //TODO: Profile and fix for GC reasons
-        public static void RetrieveContactList()
+        /// <summary>
+        /// Retrieve the contact from cache based off of the guid
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns>Entity if found, otherwise null</returns>
+        public static EntityReference RetrieveContact(Guid guid)
         {
-            var crmContactFieldLookup = ConfigurationManager.AppSettings["CRMContactFieldLookup"];
+            var resultEntity = _cachedContacts.FirstOrDefault(ent => ent.Id == guid);
+            return (resultEntity != null) 
+                ? resultEntity.ToEntityReference()
+                : null;
+        }
+
+        /// <summary>
+        /// 
+        /// 
+        /// Warning: This may be causing gen2 garbage collection, which will result in global halt during GC
+        /// Really needs to be updated to be more efficient, but there aren't any ways to retrieve customers who are deleted from CRM (so we can remove from Cache)
+        /// </summary>
+        /// <param name="_crmContactLookupFields">CRM attribute which is required during lookups</param>
+        public static void CacheContactList()
+        {
             var pageNumber = 1;
             var moreRecords = true;
             var allContactsList = new List<Entity>();
@@ -96,9 +121,9 @@ namespace Portal2Case.classes
             while (moreRecords)
             {
                 //query expression
-                var qe = new QueryExpression("contact")
+                var qe = new QueryExpression(ContactLogicalName)
                 {
-                    ColumnSet = new ColumnSet(crmContactFieldLookup),
+                    ColumnSet = new ColumnSet(CrmContactLookupFields.ToArray()),
                     PageInfo = new PagingInfo
                     {
                         PageNumber = pageNumber,
@@ -116,7 +141,8 @@ namespace Portal2Case.classes
                 }
             }
 
-            //TODO: Profile to see how slow this is when we have thousands and thousands of records...
+            //replace the current cached list with the updated list
+            //this ensures old contacts that were deleted are not included anymore
             lock (_cachedContacts)
             {
                 _cachedContacts = allContactsList;

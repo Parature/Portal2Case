@@ -12,10 +12,11 @@ namespace Portal2Case.classes
 
         /// <summary>
         /// List of entity logical names allowed for create, update, and read
-        /// Can define for entities and related entities (entities retrieved in relations to another)
+        /// Can define for entities and related entities (entities retrieved in relations to another).
+        /// Attribute in the related entity is 
         /// </summary>
-        /// <param name="entities"></param>
-        /// <param name="relatedEntities"></param>
+        /// <param name="entities">List of entities the user has direct access to (Attribute of "customerid")</param>
+        /// <param name="relatedEntities">List of entities the user has indirect permissions to (Attribute of "regardingobjectid" where customer also has direct access)</param>
         public SecurityContext(EntityPermissionsContext entities, EntityPermissionsContext relatedEntities)
         {
             EntityPermissions = entities ?? new EntityPermissionsContext(null, null, null);
@@ -24,7 +25,7 @@ namespace Portal2Case.classes
     }
 
     /// <summary>
-    /// List of entities which have permissions
+    /// List of entities which the user has permissions to
     /// </summary>
     public class EntityPermissionsContext
     {

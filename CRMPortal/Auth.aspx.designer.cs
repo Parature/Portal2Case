@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Portal2Case.Pages {
+namespace Portal2Case {
     
     
     public partial class Auth {

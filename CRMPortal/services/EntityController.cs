@@ -58,7 +58,7 @@ namespace Portal2Case.services
             SessionManagement.Pool.Perform(xrm => { ent = xrm.Retrieve(entRef.LogicalName, entRef.Id, new ColumnSet(true)); });
 
             //throw exception if it's the wrong user's case
-            if (ent.GetAttributeValue<EntityReference>("customerid").Equals(user.ToEntityReference()) == false)
+            if (ent.GetAttributeValue<EntityReference>("customerid").Equals(user) == false)
             {
                 throw new ForbiddenAccessException("You are not authorized to access this entity.");
             }
@@ -99,7 +99,7 @@ namespace Portal2Case.services
             var resp = new Guid();
             SessionManagement.Pool.Perform(xrm =>
             {
-                ent["customerid"] = user.ToEntityReference();
+                ent["customerid"] = user;
                 resp = xrm.Create(ent);
             });
 
@@ -128,7 +128,7 @@ namespace Portal2Case.services
              */
             //parent entity, which will have the secondary associated with it
             var mainEntity = GetEntity(entityLogicalName, guid);
-            if(mainEntity.GetAttributeValue<EntityReference>("customerid").Equals(user.ToEntityReference()) == false)
+            if(mainEntity.GetAttributeValue<EntityReference>("customerid").Equals(user) == false)
             {
                 //not the correct user
                 throw new ForbiddenAccessException("Not authorized to create related entities for other customers' entities.");
@@ -171,7 +171,7 @@ namespace Portal2Case.services
              */
             //parent entity, which will have the secondary associated with it
             var mainEntity = GetEntity(entityLogicalName, guid);
-            if (mainEntity.GetAttributeValue<EntityReference>("customerid").Equals(user.ToEntityReference()) == false)
+            if (mainEntity.GetAttributeValue<EntityReference>("customerid").Equals(user) == false)
             {
                 //not the correct user
                 throw new ForbiddenAccessException("Not authorized to create related entities for other customers' entities.");
@@ -198,7 +198,7 @@ namespace Portal2Case.services
 
         #region Private Functions -> Not guaranteed to be secure! Currently unused
         /// <summary>
-        /// Get a list of all entities in the system
+        /// Get a list of all entities in the system. Useful for troubleshooting
         /// </summary>
         /// <returns></returns>
         private IEnumerable<string> GetEntities()
@@ -231,9 +231,6 @@ namespace Portal2Case.services
         /// <returns></returns>
         private EntityCollection GetEntityCollectionWhere(string entityLogicalName, string attrLogicalName, string attrVal)
         {
-            var user = SessionManagement.SessionContact;
-            var permissions = SessionManagement.UserPermissions.EntityPermissions;
-
             var qe = new QueryExpression(entityLogicalName)
             {
                 ColumnSet = new ColumnSet(true),

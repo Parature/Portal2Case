@@ -6,7 +6,6 @@ using System.Web.Caching;
 using System.Web.Http.Cors;
 using System.Web.SessionState;
 using Microsoft.Xrm.Client;
-using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
 using Portal2Case.classes;
 using Portal2Case.services.filters;
@@ -23,7 +22,7 @@ namespace Portal2Case
         {
             //Add long-running static Actions here
             //They'll run every CacheRenewalInterval
-            SessionManagement.RetrieveContactList
+            SessionManagement.CacheContactList
         };
 
         /// <summary>
@@ -58,6 +57,9 @@ namespace Portal2Case
                 var connection = new CrmConnection("Xrm");
                 return new CrmOrganizationServiceContext(connection);
             });
+
+            //Example of fields which are retrieved for ALL contacts in CRM. Used in lookups if the GUID lookup method isn't used
+            SessionManagement.CrmContactLookupFields = new List<string>() { "emailaddress1" };
 
             //Scheduled tasks based off of cache expiration
             //Start all actions right off the batt though

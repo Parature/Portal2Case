@@ -8,6 +8,12 @@ namespace Portal2Case.services
     //[AuthFilter]  // uncomment if you don't want ANYONE to be able to access entity metadata without being logged in.
     public class MetadataController : ApiController
     {
+        /// <summary>
+        /// Get the metadata for an entity based off of its logical name in CRM.
+        /// The metadata includes the Display text for attributes and attribute options, as well as attribute type info and translations
+        /// </summary>
+        /// <param name="entityLogicalName">Logical name of the CRM entity</param>
+        /// <returns></returns>
         public EntityMetadata GetEntityMetadata(string entityLogicalName)
         {
             var entReadPermissions = SessionManagement.UserPermissions.EntityPermissions.Read;

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
-namespace Portal2Case.Pages
+namespace Portal2Case
 {
     public partial class Auth : System.Web.UI.Page
     {

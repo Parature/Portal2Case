@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev-P2C", "CRMPortal\Dev-P2C.csproj", "{650E8CEB-D904-4C37-BBE3-1A6BA6516786}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal2Case", "CRMPortal\Portal2Case.csproj", "{650E8CEB-D904-4C37-BBE3-1A6BA6516786}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{23DB1F9C-34B4-43EE-9C86-C6AB19CFFBC9}"
 	ProjectSection(SolutionItems) = preProject

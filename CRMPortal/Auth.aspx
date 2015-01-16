@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Auth.aspx.cs" Inherits="Portal2Case.Pages.Auth" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Auth.aspx.cs" Inherits="Portal2Case.Auth" %>
 
 <asp:Content ContentPlaceHolderID="HeadContent" runat="server" >
 </asp:Content>

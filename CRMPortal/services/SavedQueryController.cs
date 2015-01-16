@@ -17,9 +17,9 @@ namespace Portal2Case.services
         const string SavedQueryLogicalName = "savedquery";
 
         /// <summary>
-        /// Returns the SavedQuery. It's not super useful by itself, but you can grab the fetchXML to decipher it manually.
+        /// Returns the SavedQuery. Parses and returns the layoutXml and fetchXml.
         /// </summary>
-        /// <param name="viewName"></param>
+        /// <param name="viewName">Name of the saved view in CRM. Case sensitive</param>
         /// <returns></returns>
         public Dictionary<string, XDocument> GetView([FromUri]string viewName)
         {
@@ -52,7 +52,7 @@ namespace Portal2Case.services
                 {"fetchXml", XDocument.Parse(view.GetAttributeValue<string>("fetchxml"))}
             };
 
-            //allow view retrieval for both primary entities and related entities
+            //allow view retrieval for both primary entities and related entities. If this view is for a different entity type, don't return it.
             var regardingEntity = view.GetAttributeValue<string>("returnedtypecode");
             if (entReadPermissions.Contains(regardingEntity, StringComparer.CurrentCultureIgnoreCase) == false
                 && relatedReadPermissions.Contains(regardingEntity, StringComparer.CurrentCultureIgnoreCase) == false)

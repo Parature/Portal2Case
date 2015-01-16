@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Configuration;
-using System.Web.UI.HtmlControls;
 
 namespace Portal2Case
 {

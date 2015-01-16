@@ -261,8 +261,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\billPortal2CaseDemo.pubxml" />
-    <None Include="Properties\PublishProfiles\testP2C.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
