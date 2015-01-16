@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Http.Cors;
@@ -97,6 +98,34 @@ namespace Portal2Case
             {
                 Response.Redirect("/AuthFail.aspx");
             }
+        }
+
+        /// <summary>
+        /// Reads the WebConfig and configures the entities the logged in contact can access
+        /// </summary>
+        private void SetUserPermissions()
+        {
+            //get from appconfig
+            var entRead = ConfigurationManager.AppSettings["CRMentity_read"];
+            var entCreate = ConfigurationManager.AppSettings["CRMentity_create"];
+            var entUpdate = ConfigurationManager.AppSettings["CRMentity_update"];
+            var relatedRead = ConfigurationManager.AppSettings["CRMrelated_read"];
+            var relatedCreate = ConfigurationManager.AppSettings["CRMrelated_create"];
+            var relatedUpdate = ConfigurationManager.AppSettings["CRMrelated_update"];
+
+            //parse into List<string>
+            var entReadList = entRead.Split(',').Select(sValue => sValue.Trim()).ToList();
+            var entCreateList = entCreate.Split(',').Select(sValue => sValue.Trim()).ToList();
+            var entUpdateList = entUpdate.Split(',').Select(sValue => sValue.Trim()).ToList();
+            var relatedReadList = relatedRead.Split(',').Select(sValue => sValue.Trim()).ToList();
+            var relatedCreateList = relatedCreate.Split(',').Select(sValue => sValue.Trim()).ToList();
+            var relatedUpdateList = relatedUpdate.Split(',').Select(sValue => sValue.Trim()).ToList();
+
+            //add to session
+            var entPermissions = new EntityPermissionsContext(entReadList, entCreateList, entUpdateList);
+            var relatedPermissions = new EntityPermissionsContext(relatedReadList, relatedCreateList, relatedUpdateList);
+            var permContext = new SecurityContext(entPermissions, relatedPermissions);
+            SessionManagement.UserPermissions = permContext;
         }
 
         private static bool IsWebApiRequest()

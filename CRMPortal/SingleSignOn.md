@@ -35,6 +35,7 @@ if (samlVal != null)
     {
         //store in session. User is authenticated
         SessionManagement.SessionContact = contact;
+        SetUserPermissions();
     }
 
     Response.Redirect("~/Auth.aspx");
@@ -65,10 +66,11 @@ Awesome! Now we can use this to find them in CRM.
     {
         //store in session. User is authenticated
         SessionManagement.SessionContact = contact;
+        SetUserPermissions();
     }
 ```
 
-Two things are happening here. First, we try to find this contact based off their email. Look at the 'SessionManagement' class to understand what is going on here. In summary, we are checking their email against a list of cached contacts from CRM. Second, if we do find a matching contact, we have a match and can authenticate them! Setting the SessionContact in effect finalizes the process. When this happens - we fully trust that we know who the user is in CRM. This ends the login flow for all intents and purposes, and they can begin to query CRM.
+Two things are happening here. First, we try to find this contact based off their email. Look at the 'SessionManagement' class to understand what is going on here. In summary, we are checking their email against a list of cached contacts from CRM. Second, if we do find a matching contact, we have a match and can authenticate them! Setting the SessionContact in effect finalizes the process. When this happens - we fully trust that we know who the user is in CRM. This ends the login flow for all intents and purposes, and they can begin to query CRM. The final line (SetUserPermissions) is a helper method to limit the entities the contact can query from CRM. It is configured in the Web.Config.
 
 #### Final Note
 As you may discern, there are a million ways to match contacts between systems. It really depends on the data quality in both Parature and CRM. A "quality" system has two major features:
