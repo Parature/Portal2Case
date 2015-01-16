@@ -75,6 +75,11 @@ namespace Portal2Case
             //IE needs this policy header for CORS
             //Feel free to change
             HttpContext.Current.Response.AddHeader("p3p", "CP=\"CAO PSA OUR\"");
+
+            //If this request is a call to the Controllers, we only want readonly access
+            HttpContext.Current.SetSessionStateBehavior(IsWebApiRequest()
+                ? SessionStateBehavior.ReadOnly
+                : SessionStateBehavior.Required);
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
@@ -91,15 +96,6 @@ namespace Portal2Case
                 && Request.Url.LocalPath.IndexOf("/Auth.aspx", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 Response.Redirect("/AuthFail.aspx");
-            }
-        }
-
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-            //If this request is a call to the Controllers, we only want readonly access
-            if (IsWebApiRequest())
-            {
-                HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.ReadOnly);
             }
         }
 
