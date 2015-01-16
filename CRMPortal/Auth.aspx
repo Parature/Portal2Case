@@ -5,7 +5,7 @@
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
     <div>
         Auth Success. <br/>
-        <a href="~/Logout.aspx">Logout</a>
+        <a href="/Logout.aspx">Logout</a>
     </div>
     
     <script type="text/javascript">
