@@ -12,6 +12,11 @@
         Authentication Failed. <br/>
         <a href="~/Auth.aspx">Retry</a>
     </div>
+    <script type="text/javascript">
+        //Alert the parent window that SSO totally failed
+        parent.postMessage("authFail", "*");
+    </script>
+
     </form>
 </body>
 </html>

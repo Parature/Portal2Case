@@ -187,7 +187,6 @@
     <Content Include="Logout.aspx" />
     <Content Include="portal\js\ui.js" />
     <Content Include="portal\js\classes.js" />
-    <Content Include="portal\js\dist\p2c.min.js" />
     <Content Include="portal\js\initScript.js" />
     <Content Include="portal\js\jquery.p2c.js" />
     <Content Include="portal\css\p2c_styling.css" />

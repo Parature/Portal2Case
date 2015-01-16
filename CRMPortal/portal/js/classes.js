@@ -1,5 +1,6 @@
 ﻿/*
- * Moment and jQuery required
+ * Dependencies:
+ * Moment.js and jQuery 1.8+ (use 1.10+ to be safe)
  */
 
 //Entity class
@@ -124,7 +125,8 @@ function Attribute(meta, attr) {
 
 }   
 
-//Poor man's templating system. Trying to keep it simple right now
+//Simple templating system. 
+//Not all attribute types are supported for all operations - see the switch statement
 Attribute.prototype.getDisplay = function() {
     var val = this.val === undefined 
         ? ""

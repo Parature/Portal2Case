@@ -1,49 +1,83 @@
-﻿var detailsModal;
+﻿/**
+ * This is a rapidly developed UI for the CRM Incident on the Paraature Portal.
+ * It takes the place of Parature Portal elements which are populated server side, and renders a similar UI using Javascript
+ * Sadly, we do not have much access to the server templating system (beyond inserting some simple DOM placeholders, JS, and CSS), so JS is the preferred method
+ * 
+ * Ultimately, we recommend moving to a templating system
+ * 
+ * Dependencies:
+ *  - jQuery (1.8+, recommend 1.10+)
+ *  - LoDash (tested with 2.4.2)
+ *  - jQuery.DataTables (tested with 1.10.2)
+ *  - Moment.js (tested with 2.8.2)
+ */
 
-//list view
+var detailsModal; //Modal used for Case details. Populated in the "details" event
+//CRM saved queries
+var caseTableCrmView = 'P2CCaseView';
+var caseCreateCrmView = 'PortalCaseCreate';
+var caseDetailsCrmView = 'PortalCaseDetails';
+var commentsTableCrmView = 'P2C_PortalView';
+var commentCreateCrmView = 'P2C_PortalCreateComment';
+//DOM level text or classes
+var loadingClass = 'p2c-loading';
+var caseCreateSuccessText = "Case created successfully.";
+
+/*
+ * Creates the the table of Cases for this user. 
+ * It's placed before the Table on myhistory.asp and mytickets.asp (both of which are hidden)
+ *  - during load, it will have a class of "p2c-loading"
+ *  - Queries the remove WebService server to CRM info (entities, metadata, saved view)
+ *  - Builds the table DOM and inserts the Cases into it
+ */
 $.p2c.ready(function() {
     var incidentList;
     var incidentMetadata;
     var listView;
     var listViewSort;
-    var divWrapper = $('<div id="p2c-cases" class="p2c-loading" />');
+    var divWrapper = $('<div id="p2c-cases" class="' + loadingClass + '" />');
 
     //List
     var viewForm = $('div#myTicketHistory, form#myTicketSearchForm');
-    if(viewForm.length > 0) {
-        divWrapper.insertBefore(viewForm);
-
-        //wait for all three ajax calls to finish
-        //main bulkd of the program
-        $.when(getIncidents(), p2cUtil.getIncidentMetadata(), p2cUtil.getSavedView('P2CCaseView'))
-        .done(function(inc, meta, view) {
-            divWrapper.removeClass('p2c-loading');
-
-            //store for later
-            incidentMetadata = meta[0];
-            listView = getViewArr(view[0]);
-            listViewSort = getViewOrder(view[0]);
-
-            //get list of Entities as class list
-            var rawList = inc[0]['Entities']['$values'] || [];
-            incidentList = [];
-            for (var i = 0; i < rawList.length; i++) {
-                var entity = new Entity(rawList[i], incidentMetadata);
-                incidentList.push(entity);
-            }
-
-            //build table
-            var labelArr = p2cUtil.getFriendlyAttributeNames(incidentMetadata, listView);
-            var table = getViewTable(labelArr);
-            table.appendTo(divWrapper); //Insert before data population. Otherwise paging controls won't be added.
-            populateViewTable(table, incidentList, labelArr);
-        });
+    if (viewForm.length < 1) {
+        //no form found, not on the right page
+        return;
     }
+    
+    //insert the wrapper where all other DOM will be inserted
+    divWrapper.insertBefore(viewForm);
+
+    //wait for all three ajax calls to finish
+    // Once done, build the table and insert into the wrapper div
+    $.when(_getIncidents(), p2cUtil.getIncidentMetadata(), p2cUtil.getSavedView(caseTableCrmView))
+    .done(function(inc, meta, view) {
+        //We got all the Ajax data. remove the loader class
+        divWrapper.removeClass(loadingClass);
+
+        //Push the raw data back to the above variables so we don't have to pass them around
+        incidentMetadata = meta[0];
+        listView = getViewArr(view[0]);
+        listViewSort = getViewOrder(view[0]); // Data
+
+        //Convert the raw JSON to classes.
+        var rawList = inc[0]['Entities']['$values'] || [];
+        incidentList = [];
+        for (var i = 0; i < rawList.length; i++) {
+            var entity = new Entity(rawList[i], incidentMetadata);
+            incidentList.push(entity);
+        }
+
+        //build the datatable
+        var labelArr = p2cUtil.getFriendlyAttributeNames(incidentMetadata, listView); //grab Labels for Attributes. Used to create column headers
+        var table = _getViewTable(labelArr); //build the table structure (no data yet)
+        table.appendTo(divWrapper); //Insert before data population. Otherwise paging controls won't be added by DataTables.
+        _populateViewTable(table, incidentList, labelArr); // insert the data into the table
+    });
 
     /*
      * Ajax
      */
-    function getIncidents() {
+    function _getIncidents() {
         return $.p2c({
             url: "entity/incident",
             type: "get",
@@ -51,9 +85,9 @@ $.p2c.ready(function() {
     }
 
     /*
-     * View Helpers. Creates DOM
+     * View Helpers. Create DOM and build templates
      */
-    function populateViewTable(table, entities, labelArr) {
+    function _populateViewTable(table, entities, labelArr) {
         //Map the data into simple objects data tables can understand...
         //data is array of objects, wich are k-v pairs {logicalName: displayValue}
         var dataRows = _.map(entities, function(ent) {
@@ -120,7 +154,7 @@ $.p2c.ready(function() {
         });
     }
 
-    function getViewTable(labelArr) {
+    function _getViewTable(labelArr) {
         var columns = $('<tr />');
     
         for(var i = 0; i < labelArr.length; i++) {
@@ -141,11 +175,14 @@ $.p2c.ready(function() {
     }
 });
 
-//create view
+/*
+ * Creates the Case form for creation from the portal
+ * It's placed before the parature Ticket form (ticketnewwizard.asp)
+ * 
+ */
 $.p2c.ready(function() {  
-    //save for later
+    //Private variables we want to hold onto so we don't need to pass them around
     var createView;
-    var createViewSort;
     var incidentMetadata;
     var form;
     var submit;
@@ -153,66 +190,72 @@ $.p2c.ready(function() {
 
     //Creation
     var createForm = $('form[action="ticketNewProcess.asp"]');
-    if(createForm.length > 0) {
-        //insert the form we'll use
-        form = $('<form id="caseCreate" class="p2c-loading"></form>');
-        form.insertBefore('form[action="ticketNewProcess.asp"]');
-
-        $.when(p2cUtil.getSavedView('PortalCaseCreate'), p2cUtil.getIncidentMetadata())
-        .done(function(viewData, metaData) {
-            form.removeClass('p2c-loading');
-            //view
-            createView = p2cUtil.getViewArr(viewData[0]);
-            createViewSort = p2cUtil.getViewOrder(viewData[0]);
-
-            //metadata
-            incidentMetadata = metaData[0];
-
-            //DOM
-            var fields = p2cUtil.getFormFields(createView, incidentMetadata);
-            form.append(fields);
-            submit = p2cUtil.addSubmitButton(form, incidentMetadata, function(data) {
-                //DOM
-                var confirmation = $('<div id="createCaseConf">');
-                confirmation.attr('data-incidentid', data);
-                confirmation.text("Case created successfully.");
-
-                confirmation.insertBefore(form);
-                form.remove();
-                submit.remove();
-
-                //clear easy answer results
-                easyAnswerContainer.children().remove();
-            });
-
-            //Easy Answer
-            easyAnswerContainer = $('<div id="EasyAnswerContainer">')
-                .insertBefore(submit);
-            var formInputs = form.find('input, textarea');
-
-            //bind event
-            formInputs.on('change', function() {
-                easyAnswerContainer.children().remove(); //clear container
-                var inputArr = [];
-
-                formInputs.each(function(index, input) {
-                    inputArr.push($(input).val());
-                });
-
-                //Asynchronously search the KB
-                var search = searchKb(inputArr);
-                search.done(function(data) {
-                    //parse out the search results
-                    var results = $('.searchResults', data).outerHTML();
-                    //display the results
-                    easyAnswerContainer.append(results);
-                });
-            });
-        });
+    if (createForm.length < 1) {
+        //not on the correct page
+        return;
     }
 
-    /* Easy Answer */
-    function searchKb(textArr) {
+    //insert the form we'll use
+    form = $('<form id="caseCreate" class="' + loadingClass + '"></form>');
+    form.insertBefore('form[action="ticketNewProcess.asp"]');
+
+    $.when(p2cUtil.getSavedView(caseCreateCrmView), p2cUtil.getIncidentMetadata())
+    .done(function(viewData, metaData) {
+        form.removeClass(loadingClass);
+        //Parse the saved query data to get the attributes displayed and the order
+        createView = p2cUtil.getViewArr(viewData[0]);
+        //metadata
+        incidentMetadata = metaData[0];
+
+        /*
+         * Start building the DOM
+         */
+        //Retreve the input elements in the form
+        var fields = p2cUtil.getFormFields(createView, incidentMetadata);
+        form.append(fields);
+        //Add an additional submit button at the end. Bind an event to it to tear everything down at the end.
+        submit = p2cUtil.addSubmitButton(form, incidentMetadata, function(data) {
+            //DOM
+            var confirmation = $('<div id="createCaseConf">');
+            confirmation.attr('data-incidentid', data);
+            confirmation.text(caseCreateSuccessText);
+
+            confirmation.insertBefore(form);
+            form.remove();
+            submit.remove();
+
+            //clear easy answer results and remove it too
+            easyAnswerContainer.children().remove();
+        });
+
+        //Easy Answer Scaffolding.
+        easyAnswerContainer = $('<div id="EasyAnswerContainer">')
+            .insertBefore(submit);
+        var formInputs = form.find('input, textarea');
+
+        //bind event - When values change, search the KB
+        formInputs.on('change', function() {
+            easyAnswerContainer.children().remove(); //clear container
+            var inputArr = [];
+
+            //push the text value from each element to search the KB
+            formInputs.each(function(index, input) {
+                inputArr.push($(input).val());
+            });
+
+            //Asynchronously search the KB
+            var search = _searchKb(inputArr);
+            search.done(function(data) {
+                //parse out the search results
+                var results = $('.searchResults', data).outerHTML();
+                //display the results
+                easyAnswerContainer.append(results);
+            });
+        });
+    });
+
+    /* Easy Answer Clone */
+    function _searchKb(textArr) {
         var kbUrl = "//" + location.hostname
             + "/ics/support/KBResult.asp?"
             + "searchOption=anywords&questionID=&searchTime=-1&" 
@@ -233,37 +276,46 @@ $.p2c.ready(function() {
     }
 });
 
-//Case details -> custom event
+/*
+ * Additional informatin on Cases are available in a Modal.
+ * This is a separate CRM view which governs the attributes to display. May be totally different than the Table list.
+ * In the table, case numbers are clickable elements which will trigger an internal "details" event. 
+ *  - It passes along the guid of the case for lookup. It invokes another Case lookup
+ * 
+ * Loads Case Comments after loading the Case. More details in the next section
+ */
 $.p2c.evs.on('details', function(ev, guid, incidentMetadata) {
     var detailsView;
     var detailsViewSort;
     var labelArr;
     
-    //create modal. Remove if one exists already
+    //create modal to display the case details. Remove if one exists already
     if ($(detailsModal).length > 0) {
         $(detailsModal).remove();
     }
 
-    createModalDiv();
+    _createModalDiv();
    
     //wait for the multiple ajax to finish
-    $.when(getSavedView('PortalCaseDetails'), 
-        getEntity('incident', guid))
+    $.when(getSavedView('PortalCaseDetails'), getEntity('incident', guid))
     .done(function(view, entity) {
-        detailsModal.removeClass('p2c-loading');
+        detailsModal.removeClass(loadingClass);
         //save for later
         detailsView = p2cUtil.getViewArr(view[0]);
         detailsViewSort = p2cUtil.getViewOrder(view[0]);
 
+        //We want the first entity returned. Should only be one
         var inc = entity[0];
 
-        //build up the DOM
-        labelArr = p2cUtil.getFriendlyAttributeNames(incidentMetadata, detailsView);
-        var form = createForm();
-        var fields = populateForm(inc, labelArr);
+        /*
+         * DOM
+         */
+        labelArr = p2cUtil.getFriendlyAttributeNames(incidentMetadata, detailsView); //need to know the display label for attributes
+        var form = _createForm();
+        var fields = _populateForm(inc, labelArr);
         form.append(fields);
 
-        //append comments
+        //Trigger the loading of case comments associated to this Case
         $.p2c.evs.trigger('caseComments', [inc.Id, incidentMetadata]);
     });
 
@@ -271,9 +323,9 @@ $.p2c.evs.on('details', function(ev, guid, incidentMetadata) {
      * Helper functions
      */
     //DOM
-    function createModalDiv() {
+    function _createModalDiv() {
         //Create and add the DOM container
-        detailsModal = $('<div id="caseDetails" class="p2c-loading">' +
+        detailsModal = $('<div id="caseDetails" class="' + loadingClass + '">' +
             '<div id="frameContents" style="width: 100%;"></div>' +
             '<span id="detailsClose">X</span>' +
         '</div>')
@@ -289,14 +341,14 @@ $.p2c.evs.on('details', function(ev, guid, incidentMetadata) {
         });
     }
 
-    function createForm() {
+    function _createForm() {
         //create a form and append
         var form = $('<form id="caseDetails" />');
         form.appendTo(detailsModal.find('#frameContents'));
         return form;
     }
 
-    function populateForm(inc) {
+    function _populateForm(inc) {
         var incident = new Entity(inc, incidentMetadata);
         var attributes = incident.getViewAttributes(detailsView);
     
@@ -319,20 +371,31 @@ $.p2c.evs.on('details', function(ev, guid, incidentMetadata) {
     }
 });
 
-//Case comments. Triggered after case details.
+/*
+ * Triggered in the "details" section event handler above.
+ *  
+ * We've added a custom Entity called "Case Comments" to CRM (if the solution is installed).
+ * Also loaded in the Modal. 
+ *  - Part of the Activity Feed for Cases
+ *  - Meant for internaly/external communication with CSRs. Customers can create comments, as can CSRs.
+ *  - Not entirely built-out. Do not currently respect internal vs external comments nor attachments.
+ */
 $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
     $('div#tabContainer').remove();
     var tabWrapper = $('<div id="tabContainer"><ul class="tabsMenu"></ul><div class="tabs"></div>');
     var commentView;
     var commentViewOrder;
+    var commentCreateView;
 
+    //Wait for all AJAX to complete. Need to retrieve a bunch of 
     $.when(p2cUtil.getRelatedEntities('incident', id, 'new_casecomments'),
-            p2cUtil.getSavedView('P2C_PortalView'),
+            p2cUtil.getSavedView(commentsTableCrmView),
             p2cUtil.getCommentsMetadata(),
-            p2cUtil.getSavedView('P2C_PortalCreateComment'))
+            p2cUtil.getSavedView(commentCreateCrmView))
         .done(function(commentsList, view, meta, createView) {
+            //metadata
             var commentsMetadata = meta[0];
-            //comments list
+            //comments list - convert to the Entity Class (classes.js)
             var rawComments = commentsList[0].Entities.$values;
             var comments = [];
             for (var i = 0; i < rawComments.length; i++) {
@@ -340,33 +403,36 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
                 comments.push(comm);
             }
 
-            //view
+            //get the views and sorting of columns
             commentView = p2cUtil.getViewArr(view[0]);
             commentViewOrder = getViewOrder(view[0]);
-            var commentCreateView = p2cUtil.getViewArr(createView[0]);
+            commentCreateView = p2cUtil.getViewArr(createView[0]);
 
-            //DOM
+            /*
+             * DOM
+             */
             var labelArr = p2cUtil.getFriendlyAttributeNames(commentsMetadata, commentView);
-            var table = getTable(labelArr);
+            var table = _getTable(labelArr); //build the table using the label array
             //NOTE: On successful submission of a comment, the comments area is torn down and reloaded
             var createForm = $('<form />')
                 .append(getFormFields(commentCreateView, commentsMetadata));
-            p2cUtil.addRelatedSubmitButton(createForm, incMetadata, id, commentsMetadata, function() {
+            //Add a submit button. Will retrigger the Case Comments area after submission so it gets reloaded
+            _addRelatedSubmitButton(createForm, incMetadata, id, commentsMetadata, function() {
                 $.p2c.evs.trigger('caseComments', [id, incMetadata]);
             });
 
             tabWrapper.appendTo(detailsModal.find('#frameContents'));
-            addTab("All Comments", table);
-            addTab("Submit Comment", createForm);
+            _addTab("All Comments", table);
+            _addTab("Submit Comment", createForm);
 
-            populateViewTable(table, comments, labelArr);
-            initTabs();
+            _populateViewTable(table, comments, labelArr);
+            _initTabs();
     });
 
     /*
     * View Helpers. Creates DOM
     */
-    function getTable(labelArr) {
+    function _getTable(labelArr) {
         var columns = $('<tr />');
 
         for (var i = 0; i < labelArr.length; i++) {
@@ -386,7 +452,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         return table;
     }
 
-    function populateViewTable(table, entities, labelArr) {
+    function _populateViewTable(table, entities, labelArr) {
         //Map the data into simple objects data tables can understand...
         //data is array of objects, wich are k-v pairs {logicalName: displayValue}
         var dataRows = _.map(entities, function(ent) {
@@ -430,7 +496,8 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         });
     }
 
-    function addTab(label, elems) {
+    //Build tabs to switch between the comments table and the cretion form
+    function _addTab(label, elems) {
         var count = tabWrapper.find('ul.tabsMenu').children().length;
         
         //label on tab
@@ -442,7 +509,8 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         tabWrapper.find('div.tabs').append(tab);
     }
 
-    function initTabs() {
+    //Add events to the forms so they can be clicked on
+    function _initTabs() {
         tabWrapper.find('ul.tabsMenu li').eq(0).addClass('current');
         tabWrapper.find('.tabContent').eq(0).show();
 
@@ -456,10 +524,46 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
             $(tab).show();
         });
     }
+    
+    function _addRelatedSubmitButton(form, parentMeta, parentGuid, metadata, onConfirm) {
+        var submit = $('<button type="button" class="crmSubmit">Submit</submit>');
+        submit.appendTo(form);
+
+        submit.on('click', function() {
+            var vals = form.serializeArray();
+            formDisabledState(form, 'disabled');
+
+            //validate
+            var successfulValidation = validValues(vals, metadata);
+            if (!successfulValidation) {
+                alert("Invalid Fields set in the form. Please correct.");
+                formDisabledState(form, ''); //reenable
+                return false;
+            }
+
+            //turn into our class object
+            var insertEnt = createInsertObj(vals, metadata);
+
+            //create the case
+            p2cUtil.createRelatedEntity(parentMeta['LogicalName'], parentGuid, metadata['LogicalName'], insertEnt)
+                .done(function(data, status) {
+                    onConfirm(data);
+                    return false;
+                })
+                .fail(function(data, status) {
+                    form.remove();
+                    submit.remove();
+                });
+        });
+
+        return submit;
+    }
+
 });
 
 /*
- * Helper and AJAX functions under the p2cUtil
+ * Helper and AJAX functions under the p2cUtil namespace.
+ * These functions were all used multiple times and proved useful to keep separate and hidden during development
  */
 (function( ns, $ ) {
     /*
@@ -720,40 +824,6 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         return submit;
     }
 
-    ns.addRelatedSubmitButton =  function(form, parentMeta, parentGuid, metadata, onConfirm) {
-        var submit = $('<button type="button" class="crmSubmit">Submit</submit>');
-        submit.appendTo(form);
-
-        submit.on('click', function() {
-            var vals = form.serializeArray();
-            formDisabledState(form, 'disabled');
-
-            //validate
-            var successfulValidation = validValues(vals, metadata);
-            if (!successfulValidation) {
-                alert("Invalid Fields set in the form. Please correct.");
-                formDisabledState(form, ''); //reenable
-                return false;
-            }
-
-            //turn into our class object
-            var insertEnt = createInsertObj(vals, metadata);
-
-            //create the case
-            createRelatedEntity(parentMeta['LogicalName'], parentGuid, metadata['LogicalName'], insertEnt)
-                .done(function(data, status) {
-                    onConfirm(data);
-                    return false;
-                })
-                .fail(function(data, status) {
-                    form.remove();
-                    submit.remove();
-                });
-        });
-
-        return submit;
-    }
-
     ns.validValues = function(formVals, entityMetadata) {
         //turn into Attribute objects, and check validity
         for (var i = 0; i < formVals.length; i++) {
@@ -814,28 +884,29 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
 }( window.p2cUtil = window.p2cUtil || {}, jQuery ));
 
 /*
- * Temporary workaround for logging out of the portal AND P2C (aka Single Log Out)
+ * Logging out of the portal AND P2C (aka Single Log Out)
  */
 $(window).load(function() {
-    // log all calls to setArray
+    //Capture the original logout function
     var proxied = window.exitSupport;
+
+    //Override the original logout function so we logout of the portal first
     window.exitSupport = function() {
-        //set a timeout to log out in 1.5 seconds regardless of success or failure
-        setTimeout(function() {
-            proxied.apply(this, arguments);
-
-
-        }, 1500);
-
         //remove cached items from session storage
         p2cUtil.p2cSessStoreClear();
+
+        //set a timeout to log out in 1 second regardless of success or failure
+        setTimeout(function() {
+            proxied.apply(this, arguments);
+        }, 1000);
+
         //submit logout, then on confirmation/failure, logout normally
-        logoutP2C().done(function() {
+        _logoutP2C().done(function() {
             proxied.apply(this, arguments);
         });
     };
   
-    function logoutP2C() {
+    function _logoutP2C() {
         return $.p2c({
             url: 'auth',
             type: 'DELETE',
@@ -844,9 +915,9 @@ $(window).load(function() {
 });
 
 /*
- * DataTables alterations
+ * DataTables alterations - sorting for date/times
  */
-//prevent it from Alerting. Throw a JS error instead.
+//prevent it from Alerting when there is an error. Throw a JS error instead.
 $.fn.dataTableExt.sErrMode = "throw";
 $.extend(jQuery.fn.dataTableExt.oSort, {
     //custom datetime parsing

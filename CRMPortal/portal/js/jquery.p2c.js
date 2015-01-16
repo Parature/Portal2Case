@@ -1,17 +1,15 @@
-﻿;(function( $ ) {
-    /*
-    //url param is Anchor element parser
-        url.protocol; // => "http:"
-        url.hostname; // => "example.com"
-        url.port;     // => "3000"
-        url.pathname; // => "/pathname/"
-        url.search;   // => "?search=test"
-        url.hash;     // => "#hash"
-        url.host;     // => "example.com:3000"
-     */
+﻿/*
+ * jQuery plugin for Portal2Case
+ * - Handles Authenticate transparenty via a hidden iframe
+ * - Wraps the standard jquery.ajax function with automated session renegotiation, retries, and switches between $.ajax and postMessage (all requests use the Promise API)
+ * - Uses its own internal events to prevent race-conditions (primarily, $.p2c.ready which functions like $.ready)
+ * 
+ * Uses a really basic polyfill for console.log
+ */
+;(function( $, console ) {
     var _config = {
         url: undefined,
-        baseApiUri: 'api', //always going to add it to api calls
+        baseApiUri: '/api', //always going to add it to api calls
         ready: false,
         iframe: undefined,
     };
@@ -92,13 +90,17 @@
             return;
         }
 
-        _authenticate(triggerSuccess);
+        _authenticate(triggerSuccess, logFailure);
 
         //on success trigger
         function triggerSuccess() {
             $.p2c.evs.trigger('ready');
             _config.ready = true;
         }
+
+        function logFailure() {
+            console.log();
+        };
     };
 
     //Event triggered when authenticated. Fluff method
@@ -213,6 +215,15 @@
         }
     };
 
+    /* Simple browser parser (anchor tag) returned
+        url.protocol; // => "http:"
+        url.hostname; // => "example.com"
+        url.port;     // => "3000"
+        url.pathname; // => "/pathname/"
+        url.search;   // => "?search=test"
+        url.hash;     // => "#hash"
+        url.host;     // => "example.com:3000"
+     */
     var _parseUrl = function(url)
     {
         var parser = document.createElement('a');
@@ -237,6 +248,7 @@
         return valid;
     }
 
+    //Check if we are in an iframe
     var _inIframe = function() {
         try {
             return window.self !== window.top;
@@ -247,7 +259,7 @@
 
     //callback to trigger ready function when authentication is checked.
     //TODO: Add a failure check
-    var _authenticate = function(onSuccess) {
+    var _authenticate = function(onSuccess, onFailure) {
         if(_inIframe()) {
             //if in an iframe, alert the parent (which may be this same code) that we are not logged in and have a circular dependency
             //this can be very confusing, so remember that the IdP IS this page.
@@ -257,9 +269,8 @@
 
         //load iframe which will proxy all requests
         iframeLoad()
-                .done(function() {
-                    onSuccess();
-                });
+                .done(onSuccess)
+                .fail(onFailure);
 
         function iframeLoad() {
             //remove if it exists. creating a new one
@@ -276,6 +287,10 @@
 
                 if (msg == 'ready') {
                     def.resolve();
+                }
+
+                if (msg == 'authFail') {
+                    def.reject();
                 }
             });
 
@@ -294,4 +309,4 @@
             return def;
         }
     }
-})( jQuery );
+})( jQuery, console || { log: function () {}});
