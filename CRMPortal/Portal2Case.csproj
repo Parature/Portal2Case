@@ -192,7 +192,7 @@
     <Content Include="portal\js\jquery.p2c.js" />
     <Content Include="portal\css\p2c_styling.css" />
     <None Include="portal\LinkingToPortal.md" />
-    <Content Include="startSSO.aspx" />
+    <Content Include="StartSSO.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -258,12 +258,12 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="startSSO.aspx.cs">
-      <DependentUpon>startSSO.aspx</DependentUpon>
+    <Compile Include="StartSSO.aspx.cs">
+      <DependentUpon>StartSSO.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="startSSO.aspx.designer.cs">
-      <DependentUpon>startSSO.aspx</DependentUpon>
+    <Compile Include="StartSSO.aspx.designer.cs">
+      <DependentUpon>StartSSO.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
