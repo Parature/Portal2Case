@@ -94,7 +94,8 @@ namespace Portal2Case
              * WebResources and ScriptResources are weird cases -> Session is null even if authed. Passing through, shouldn't be a security risk
              */
             if (SessionManagement.NotAuthorized()
-                && Request.Url.LocalPath.IndexOf("/Auth.aspx", StringComparison.OrdinalIgnoreCase) >= 0)
+                && Request.Url.LocalPath != "/Auth.aspx"
+                && Request.Url.LocalPath != "/startSso.aspx")
             {
                 Response.Redirect("/AuthFail.aspx");
             }
