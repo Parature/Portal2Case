@@ -191,6 +191,7 @@
     <Content Include="portal\js\initScript.js" />
     <Content Include="portal\js\jquery.p2c.js" />
     <Content Include="portal\css\p2c_styling.css" />
+    <None Include="portal\LinkingToPortal.md" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -204,6 +205,7 @@
     <Content Include="crmSolutions\Portal2Case_1_0_managed.zip" />
     <Content Include="crmSolutions\Portal2Case_Comments_1_0.zip" />
     <Content Include="crmSolutions\Portal2Case_Comments_1_0_managed.zip" />
+    <Content Include="SingleSignOn.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />

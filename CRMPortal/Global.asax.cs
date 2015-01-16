@@ -90,7 +90,7 @@ namespace Portal2Case
             if (SessionManagement.NotAuthorized()
                 && Request.Url.LocalPath.IndexOf("/Auth.aspx", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                Response.Redirect("");
+                Response.Redirect("/AuthFail.aspx");
             }
         }
 
