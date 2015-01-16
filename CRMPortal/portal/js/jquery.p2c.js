@@ -297,7 +297,7 @@
             //create the iframe and bootstrap it
             var iframe = $('<iframe />');
             iframe.attr({
-                'src': _parseUrl(_config.url).origin + "/Auth.aspx",
+                'src': _config.url,
                 'id': 'authP2C'
             });
             iframe.attr('style', 'display:none !important'); //don't use $.css. Bad in IE

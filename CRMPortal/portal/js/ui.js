@@ -297,7 +297,7 @@ $.p2c.evs.on('details', function(ev, guid, incidentMetadata) {
     _createModalDiv();
    
     //wait for the multiple ajax to finish
-    $.when(p2cUtil.getSavedView('PortalCaseDetails'), getEntity('incident', guid))
+    $.when(p2cUtil.getSavedView('PortalCaseDetails'), p2cUtil.getEntity('incident', guid))
     .done(function(view, entity) {
         detailsModal.removeClass(loadingClass);
         //save for later
