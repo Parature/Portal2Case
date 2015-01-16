@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    
+        You shouldn't ever see this page. It should redirect to start SSO.
     </div>
     </form>
 </body>
