@@ -405,7 +405,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
 
             //get the views and sorting of columns
             commentView = p2cUtil.getViewArr(view[0]);
-            commentViewOrder = getViewOrder(view[0]);
+            commentViewOrder = p2cUtil.getViewOrder(view[0]);
             commentCreateView = p2cUtil.getViewArr(createView[0]);
 
             /*
@@ -415,7 +415,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
             var table = _getTable(labelArr); //build the table using the label array
             //NOTE: On successful submission of a comment, the comments area is torn down and reloaded
             var createForm = $('<form />')
-                .append(getFormFields(commentCreateView, commentsMetadata));
+                .append(p2cUtil.getFormFields(commentCreateView, commentsMetadata));
             //Add a submit button. Will retrigger the Case Comments area after submission so it gets reloaded
             _addRelatedSubmitButton(createForm, incMetadata, id, commentsMetadata, function() {
                 $.p2c.evs.trigger('caseComments', [id, incMetadata]);
@@ -531,18 +531,18 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
 
         submit.on('click', function() {
             var vals = form.serializeArray();
-            formDisabledState(form, 'disabled');
+            p2cUtil.formDisabledState(form, 'disabled');
 
             //validate
-            var successfulValidation = validValues(vals, metadata);
+            var successfulValidation = p2cUtil.validValues(vals, metadata);
             if (!successfulValidation) {
                 alert("Invalid Fields set in the form. Please correct.");
-                formDisabledState(form, ''); //reenable
+                p2cUtil.formDisabledState(form, ''); //reenable
                 return false;
             }
 
             //turn into our class object
-            var insertEnt = createInsertObj(vals, metadata);
+            var insertEnt = p2cUtil.createInsertObj(vals, metadata);
 
             //create the case
             p2cUtil.createRelatedEntity(parentMeta['LogicalName'], parentGuid, metadata['LogicalName'], insertEnt)
@@ -732,7 +732,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         //create the attributes, modify with new value, and return
         for (var i = 0; i < formValArr.length; i++) {
             var field = formValArr[i];
-            var aMetadata = getAttrMetadata(field['name'], entityMetadata);
+            var aMetadata = ns.getAttrMetadata(field['name'], entityMetadata);
             var attr = new Attribute(aMetadata, undefined);
             attr.val = field['value'];
 
@@ -772,7 +772,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
     ns.getFormFields = function(attrArr, entityMetadata) {
         var dom = $('<div />');
         for (var i = 0; i < attrArr.length; i++) {
-            var aMetadata = getAttrMetadata(attrArr[i], entityMetadata);
+            var aMetadata = ns.getAttrMetadata(attrArr[i], entityMetadata);
             var attr = new Attribute(aMetadata, undefined);
 
             dom.append(attr.getUpsertHtml());
@@ -797,7 +797,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
 
         submit.on('click', function() {
             var vals = form.serializeArray();
-            formDisabledState(form, 'disabled');
+            ns.formDisabledState(form, 'disabled');
 
             //validate
             var successfulValidation = validValues(vals, metadata);
@@ -808,10 +808,10 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
             }
 
             //turn into our class object
-            var insertEnt = createInsertObj(vals, metadata);
+            var insertEnt = ns.createInsertObj(vals, metadata);
 
             //create the case
-            createEntity(metadata['LogicalName'], insertEnt)
+            ns.createEntity(metadata['LogicalName'], insertEnt)
                 .done(function(data, status) {
                     onConfirm(data);
                 })
@@ -828,7 +828,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
         //turn into Attribute objects, and check validity
         for (var i = 0; i < formVals.length; i++) {
             var field = formVals[i];
-            var aMetadata = getAttrMetadata(field['name'], entityMetadata);
+            var aMetadata = p2cUtil.getAttrMetadata(field['name'], entityMetadata);
             var attr = new Attribute(aMetadata, undefined);
             attr.val = field['value'];
 
