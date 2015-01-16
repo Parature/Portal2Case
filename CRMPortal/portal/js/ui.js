@@ -14,11 +14,11 @@
 
 var detailsModal; //Modal used for Case details. Populated in the "details" event
 //CRM saved queries
-var caseTableCrmView = 'P2CCaseView';
-var caseCreateCrmView = 'PortalCaseCreate';
-var caseDetailsCrmView = 'PortalCaseDetails';
-var commentsTableCrmView = 'P2C_PortalView';
-var commentCreateCrmView = 'P2C_PortalCreateComment';
+var caseTableCrmView = 'P2C_CaseView';
+var caseCreateCrmView = 'P2C_CaseCreate';
+var caseDetailsCrmView = 'P2C_CaseDetails';
+var commentsTableCrmView = 'P2C_CommentView';
+var commentCreateCrmView = 'P2C_CommentCreate';
 //DOM level text or classes
 var loadingClass = 'p2c-loading';
 var caseCreateSuccessText = "Case created successfully.";
