@@ -10,7 +10,7 @@ The Microsoft Parature Portal2Case for .NET allows you to integrate a Parature P
 Please see the separate documentation on [contributing](CONTRIBUTING.md) to the ParatureSDK.
 
 ## Features
-
+WIP.
 
 # Configuration
 Configuration is a bit of a winding path with a lot of small steps. Bear with it - this integration is configuration-heavy but maintenance-light by design. Keep notes, and record logins - for each of the systems accessed. There's a lot to keep track of and due dilligence will save a lot of time. The overall configuration can take approximately 2 hours, and a lot more if any issues arise. Understanding the core technology will help tremendously. Configuration will be split into two sections: development and production. There are some minor configuration changes necessary when migrating to production, so this will be highlighted and commented upon.
