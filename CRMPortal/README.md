@@ -45,10 +45,10 @@ _Parature_
 1. Style your portal. You can find templates [here](http://templates.supportcenteronline.com/)
 2. Request "PortalAsIdP" SSO for the development environment. See README [here under Usage section](https://github.com/brtubb/ParatureSampleSP-SAML/blob/master/SAMLdecoder/README.md)
  * For the Url and Port of the testing environment, provide "http://localhost:64659/" (default for this project)
-3. In the Portal bottom file, link to all JS and css files under the [/portal](~/portal) folder
+3. In the Portal bottom file, link to all JS and css files under the [/portal](portal) folder
  * Order is important
  * initScript.js needs to be modified
- * See a guide [here](~/portal/LinkingToPortal.md)
+ * See a guide [here](portal/LinkingToPortal.md)
 
 _This Service_
 It's assumed that this site will be hosted locally during development, then moved to a production server during production. This section will focus only on running on Localhost with the default port settings.
