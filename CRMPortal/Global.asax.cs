@@ -95,7 +95,7 @@ namespace Portal2Case
              */
             if (SessionManagement.NotAuthorized()
                 && Request.Url.LocalPath != "/Auth.aspx"
-                && Request.Url.LocalPath != "/startSso.aspx")
+                && Request.Url.LocalPath != "/StartSso.aspx")
             {
                 Response.Redirect("/AuthFail.aspx");
             }

@@ -4,13 +4,11 @@ The Microsoft Parature Portal2Case for .NET allows you to integrate a Parature P
 * Users can log into a website (the Parature Portal) to track their service requests (Cases)
 * Cases can be created in real-time
 * Status and history can be tracked for all of their Cases
-  
+* Answers from the Knowledgebase auto-suggested during Case creation
+* Manage fields visible on Portal using CRM Saved Views
 
 ## Contribute
 Please see the separate documentation on [contributing](CONTRIBUTING.md) to the ParatureSDK.
-
-## Features
-WIP.
 
 # Configuration
 Configuration is a bit of a winding path with a lot of small steps. Bear with it - this integration is configuration-heavy but maintenance-light by design. Keep notes, and record logins - for each of the systems accessed. There's a lot to keep track of and due dilligence will save a lot of time. The overall configuration can take approximately 2 hours, and a lot more if any issues arise. Understanding the core technology will help tremendously. Configuration will be split into two sections: development and production. There are some minor configuration changes necessary when migrating to production, so this will be highlighted and commented upon.
@@ -22,7 +20,6 @@ Configuration is a bit of a winding path with a lot of small steps. Bear with it
 * Provided styling most likely won't work with many Portal Templates out of the box. Some minor changes will be necessary.
 
 #### Preparation
-
 1. Ensure you have environments for:
  * Parature
  * Dynamics CRM 2013/2015 (2011 should work but is not guaranteed). On-prem, non-IFD deployments is out of scope of this documentation.
@@ -30,7 +27,7 @@ Configuration is a bit of a winding path with a lot of small steps. Bear with it
 2. Apply for SSO through the [Parature Partner Portal](http://partners.support.parature.com/)
 3. Get familiar with "PortalAsIdP" SSO - [check a sample with SAML](https://github.com/brtubb/ParatureSampleSP-SAML)
 4. Establish primary Unique Identifier between CRM Contacts and Parature Customers.
-5. Read through the [architectural overview documentation]. It'll help with any troubleshooting
+5. Read through the [architectural overview documentation](//partners.support.parature.com/FileManagement/Download/78ee543ac214437bb159135c76d7fe4c). It'll help with any troubleshooting
 
 #### Initial Development Configuration
 _CRM_
