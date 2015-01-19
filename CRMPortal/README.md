@@ -27,7 +27,7 @@ Configuration is a bit of a winding path with a lot of small steps. Bear with it
 2. Apply for SSO through the [Parature Partner Portal](http://partners.support.parature.com/)
 3. Get familiar with "PortalAsIdP" SSO - [check a sample with SAML](https://github.com/brtubb/ParatureSampleSP-SAML)
 4. Establish primary Unique Identifier between CRM Contacts and Parature Customers.
-5. Read through the [architectural overview documentation](//partners.support.parature.com/FileManagement/Download/78ee543ac214437bb159135c76d7fe4c). It'll help with any troubleshooting
+5. Read through the [architectural overview documentation](http://partners.support.parature.com/FileManagement/Download/78ee543ac214437bb159135c76d7fe4c). It'll help with any troubleshooting
 
 #### Initial Development Configuration
 _CRM_
