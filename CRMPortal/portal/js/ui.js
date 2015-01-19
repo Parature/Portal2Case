@@ -247,7 +247,7 @@ $.p2c.ready(function() {
             var search = _searchKb(inputArr);
             search.done(function(data) {
                 //parse out the search results
-                var results = $('.searchResults', data).outerHTML();
+                var results = $('.searchResults', data).prop("outerHTML");
                 //display the results
                 easyAnswerContainer.append(results);
             });
