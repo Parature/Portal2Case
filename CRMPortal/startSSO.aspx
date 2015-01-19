@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StartSsO.aspx.cs" Inherits="Portal2Case.Sso" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StartSso.aspx.cs" Inherits="Portal2Case.Sso" %>
 
 <!DOCTYPE html>
 
