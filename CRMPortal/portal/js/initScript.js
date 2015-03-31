@@ -24,7 +24,8 @@ if ($('div#myTicketHistory, ' +
 
     //on the correct page
     $.p2c.config({
-        url: "http://localhost:64659",
+        startSsoUrl: "",
+        rootUrl: ""
     });
 
     $.p2c.init();

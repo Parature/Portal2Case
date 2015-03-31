@@ -16,8 +16,9 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 ;(function( $, console ) {
     var _config = {
-        url: undefined,
-        baseApiUri: '/api', //always going to add it to api calls
+        startSsoUrl: undefined,
+        baseApiUri: '/api', //always going to add to the rootUrl parameter
+        rootUrl: undefined, //specify the URL + relative URI where P2C is hosted
         ready: false,
         iframe: undefined,
     };
@@ -88,7 +89,11 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     $.p2c.evs = $('<div />'); 
 
     $.p2c.config = function(config) {
-        _config.url = _parseUrl(config.url);
+        _config.startSsoUrl = _parseUrl(config.startSsoUrl);
+        if (config.baseApiUri != undefined) {
+            //use to specify the api URL root, such as http://<domain>/api/<controllerUri>
+            _config.baseApiUri = _parseUrl(config.baseApiUri);
+        }
     };
 
     $.p2c.init = function() {
@@ -148,18 +153,11 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
          */
         //parse so we are tolerant of screwups in the relative url
         function getAjaxUrl(relUrl) {
-            var parser = _parseUrl(_config.url.href); //get the anchor object
+            var parser = _parseUrl(_config.rootUrl); //get the anchor object
             
             //build relative URL
-            parser.pathname = _config.baseApiUri; //parse the base API path first
-            var baseRel = parser.pathname;
-            parser.pathname = relUrl;
-            var relApi = parser.pathname;
-            parser.pathname = relApi;
-            var totalRel = baseRel + "/" + relApi;
-            totalRel = totalRel.replace("//", "/"); //Chrome and IE behave differently. 
-            //place back into the parser
-            parser.pathname = totalRel;
+            parser.pathname = (_config.baseApiUri + "/" + relUrl)
+                .replace("//", "/"); //Chrome and IE behave differently.
 
             return parser.href;
         }
@@ -169,10 +167,11 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         function postMessageAjaxProxy(payload) {
             var def = $.Deferred();
             //postMessage proxy
-            if (_config.iframe.length < 1) {
+            if (_config.iframe == null ||  _config.iframe.length < 1) {
+                def.reject();
                 //todo: throw event here
                 console.log('Error, iframe not found');
-                return;
+                return def;
             }
 
             var win = _config.iframe[0].contentWindow;
@@ -243,7 +242,7 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         var valid = true;
         var errorMessage = "";
         //check for failure to init via config
-        if (config.url == undefined) {
+        if (config.startSsoUrl == undefined) {
             errorMessage += 'Url is empty. \n';
             valid = false;
         }
@@ -305,7 +304,7 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             //create the iframe and bootstrap it
             var iframe = $('<iframe />');
             iframe.attr({
-                'src': _config.url,
+                'src': _config.startSsoUrl,
                 'id': 'authP2C'
             });
             iframe.attr('style', 'display:none !important'); //don't use $.css. Bad in IE

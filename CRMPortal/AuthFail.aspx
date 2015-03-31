@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
     <div>
         Authentication Failed. <br/>
-        <a href="/Auth.aspx">Retry</a>
+        <a href="/StartSso.aspx">Retry</a>
     </div>
     <script type="text/javascript">
         //Alert the parent window that SSO totally failed

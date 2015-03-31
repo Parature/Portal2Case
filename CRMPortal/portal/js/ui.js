@@ -29,7 +29,7 @@ var commentsTableCrmView = 'P2C_CommentView';
 var commentCreateCrmView = 'P2C_CommentCreate';
 //DOM level text or classes
 var loadingClass = 'p2c-loading';
-var caseCreateSuccessText = "Case created successfully.";
+var caseCreateSuccessText = $("<span>Case created successfully. Click <a href=\"myhistory.asp\">here</a> to view your cases.</span>");
 
 /*
  * Creates the the table of Cases for this user. 
@@ -38,22 +38,21 @@ var caseCreateSuccessText = "Case created successfully.";
  *  - Queries the remove WebService server to CRM info (entities, metadata, saved view)
  *  - Builds the table DOM and inserts the Cases into it
  */
-$.p2c.ready(function() {
+//List
+var viewForm = $('div#myTicketHistory, form#myTicketSearchForm');
+if (viewForm.length > 0) {
+    //found form, continue
+    var divWrapper = $('<div id="p2c-cases" class="' + loadingClass + '" />');
+
+    //insert the wrapper where all other DOM will be inserted
+    divWrapper.insertBefore(viewForm);
+
+    //bind to the load event
+    $.p2c.ready(function() {
     var incidentList;
     var incidentMetadata;
     var listView;
     var listViewSort;
-    var divWrapper = $('<div id="p2c-cases" class="' + loadingClass + '" />');
-
-    //List
-    var viewForm = $('div#myTicketHistory, form#myTicketSearchForm');
-    if (viewForm.length < 1) {
-        //no form found, not on the right page
-        return;
-    }
-    
-    //insert the wrapper where all other DOM will be inserted
-    divWrapper.insertBefore(viewForm);
 
     //wait for all three ajax calls to finish
     // Once done, build the table and insert into the wrapper div
@@ -182,34 +181,33 @@ $.p2c.ready(function() {
         return table;
     }
 });
+}
 
 /*
  * Creates the Case form for creation from the portal
  * It's placed before the parature Ticket form (ticketnewwizard.asp)
  * 
  */
-$.p2c.ready(function() {  
+//Creation
+var createForm = $('form[action="ticketNewProcess.asp"]');
+if (createForm.length > 0) {
+    //on the creation page
+    //insert the form we'll use
+    var divWrapper = $('<form id="caseCreate" class="' + loadingClass + '"></form>');
+    divWrapper.insertBefore(createForm);
+
+    //bind to the authentication load event
+    $.p2c.ready(function() {  
     //Private variables we want to hold onto so we don't need to pass them around
     var createView;
     var incidentMetadata;
-    var form;
+   
     var submit;
     var easyAnswerContainer;
 
-    //Creation
-    var createForm = $('form[action="ticketNewProcess.asp"]');
-    if (createForm.length < 1) {
-        //not on the correct page
-        return;
-    }
-
-    //insert the form we'll use
-    form = $('<form id="caseCreate" class="' + loadingClass + '"></form>');
-    form.insertBefore('form[action="ticketNewProcess.asp"]');
-
     $.when(p2cUtil.getSavedView(caseCreateCrmView), p2cUtil.getIncidentMetadata())
     .done(function(viewData, metaData) {
-        form.removeClass(loadingClass);
+        divWrapper.removeClass(loadingClass);
         //Parse the saved query data to get the attributes displayed and the order
         createView = p2cUtil.getViewArr(viewData[0]);
         //metadata
@@ -220,16 +218,16 @@ $.p2c.ready(function() {
          */
         //Retreve the input elements in the form
         var fields = p2cUtil.getFormFields(createView, incidentMetadata);
-        form.append(fields);
+        divWrapper.append(fields);
         //Add an additional submit button at the end. Bind an event to it to tear everything down at the end.
-        submit = p2cUtil.addSubmitButton(form, incidentMetadata, function(data) {
+        submit = p2cUtil.addSubmitButton(divWrapper, incidentMetadata, function(data) {
             //DOM
             var confirmation = $('<div id="createCaseConf">');
             confirmation.attr('data-incidentid', data);
-            confirmation.text(caseCreateSuccessText);
+            confirmation.append($(caseCreateSuccessText));
 
-            confirmation.insertBefore(form);
-            form.remove();
+            confirmation.insertBefore(divWrapper);
+            divWrapper.remove();
             submit.remove();
 
             //clear easy answer results and remove it too
@@ -239,7 +237,7 @@ $.p2c.ready(function() {
         //Easy Answer Scaffolding.
         easyAnswerContainer = $('<div id="EasyAnswerContainer">')
             .insertBefore(submit);
-        var formInputs = form.find('input, textarea');
+        var formInputs = divWrapper.find('input, textarea');
 
         //bind event - When values change, search the KB
         formInputs.on('change', function() {
@@ -283,9 +281,10 @@ $.p2c.ready(function() {
         return $.get(kbUrl);
     }
 });
+}
 
 /*
- * Additional informatin on Cases are available in a Modal.
+ * Additional information on Cases are available in a Modal.
  * This is a separate CRM view which governs the attributes to display. May be totally different than the Table list.
  * In the table, case numbers are clickable elements which will trigger an internal "details" event. 
  *  - It passes along the guid of the case for lookup. It invokes another Case lookup
@@ -808,7 +807,7 @@ $.p2c.evs.on('caseComments', function(ev, id, incMetadata) {
             ns.formDisabledState(form, 'disabled');
 
             //validate
-            var successfulValidation = validValues(vals, metadata);
+            var successfulValidation = ns.validValues(vals, metadata);
             if (!successfulValidation) {
                 alert("Invalid Fields set in the form. Please correct.");
                 formDisabledState(form, ''); //reenable
