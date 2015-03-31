@@ -8,10 +8,11 @@ using System.Xml.Linq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Portal2Case.classes;
+using Portal2Case.services.filters;
 
 namespace Portal2Case.services
 {
-    //[AuthFilter]  // uncomment if you don't want ANYONE to be able to access saved queries without being logged in.
+    [AuthFilter]
     public class SavedQueryController : ApiController
     {
         const string SavedQueryLogicalName = "savedquery";
