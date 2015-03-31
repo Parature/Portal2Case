@@ -17,7 +17,8 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ;(function( $, console ) {
     var _config = {
         startSsoUrl: undefined,
-        baseApiUri: '/api', //always going to add it to api calls
+        baseApiUri: '/api', //always going to add to the rootUrl parameter
+        rootUrl: undefined, //specify the URL + relative URI where P2C is hosted
         ready: false,
         iframe: undefined,
     };
@@ -89,7 +90,10 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     $.p2c.config = function(config) {
         _config.startSsoUrl = _parseUrl(config.startSsoUrl);
-        _config.baseApiUri = _parseUrl(config.baseApiUri);
+        if (config.baseApiUri != undefined) {
+            //use to specify the api URL root, such as http://<domain>/api/<controllerUri>
+            _config.baseApiUri = _parseUrl(config.baseApiUri);
+        }
     };
 
     $.p2c.init = function() {
@@ -149,10 +153,10 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
          */
         //parse so we are tolerant of screwups in the relative url
         function getAjaxUrl(relUrl) {
-            var parser = _parseUrl(_config.baseApiUri.href); //get the anchor object
+            var parser = _parseUrl(_config.rootUrl); //get the anchor object
             
             //build relative URL
-            parser.pathname = (parser.pathname + "/" + relUrl)
+            parser.pathname = (_config.baseApiUri + "/" + relUrl)
                 .replace("//", "/"); //Chrome and IE behave differently.
 
             return parser.href;
