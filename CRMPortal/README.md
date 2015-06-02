@@ -18,6 +18,7 @@ Configuration is a bit of a winding path with a lot of small steps. Bear with it
  * Contacts _must_ exist in both Parature and CRM. SSO (recommended) or data Import both valid options
  * Contacts need to be related in some fashion (recommendation: Username in Parature = GUID from CRM)
 * Provided styling most likely won't work with many Portal Templates out of the box. Some minor changes will be necessary.
+* Portal2Case does not work as-is with Safari. It relies on 3rd party cookies, which are disabled by default in Safari.
 
 #### Preparation
 1. Ensure you have environments for:
