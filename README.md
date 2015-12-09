@@ -26,7 +26,7 @@ Configuration is a bit of a winding path with a lot of small steps. Bear with it
  * Dynamics CRM 2013/2015 (2011 should work but is not guaranteed). On-prem, non-IFD deployments is out of scope of this documentation.
  * Hosting (localhost is fine for testing)
 2. Apply for SSO through the [Parature Partner Portal](http://partners.support.parature.com/)
-3. Get familiar with "PortalAsIdP" SSO - [check a sample with SAML](https://github.com/brtubb/ParatureSampleSP-SAML)
+3. Get familiar with "PortalAsIdP" SSO - [check a sample with SAML](https://github.com/Parature/ParatureSampleSP-SAML)
 4. Establish primary Unique Identifier between CRM Contacts and Parature Customers.
 5. Read through the [architectural overview documentation](http://partners.support.parature.com/FileManagement/Download/78ee543ac214437bb159135c76d7fe4c). It'll help with any troubleshooting
 
@@ -44,7 +44,7 @@ _Parature_
 [It is recommended to not develop on a live environment. Develop before Go-Live or in Sandbox]
 
 1. Style your portal. You can find templates [here](http://templates.supportcenteronline.com/)
-2. Request "PortalAsIdP" SSO for the development environment. See README [here under Usage section](https://github.com/brtubb/ParatureSampleSP-SAML/blob/master/SAMLdecoder/README.md)
+2. Request "PortalAsIdP" SSO for the development environment. See README [here under Usage section](https://github.com/Parature/ParatureSampleSP-SAML/blob/master/SAMLdecoder/README.md)
  * For the Url and Port of the testing environment, provide "http://localhost:64659/" (default for this project)
 3. In the Portal bottom file, link to all JS and css files under the [/portal](portal) folder
  * Order is important
